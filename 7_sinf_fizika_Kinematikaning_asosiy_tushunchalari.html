@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7-sinf fizika — Kinematikaning asosiy tushunchalari</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#07111f,#102a43,#07111f);color:#fff;min-height:100vh;line-height:1.6}
+header{text-align:center;padding:30px 15px;background:rgba(0,0,0,.35);border-bottom:1px solid rgba(255,255,255,.15)}
+header h1{color:#7ee8ff;font-size:clamp(25px,5vw,42px)}
+header p{color:#d6e9ff;margin-top:8px}
+.container{width:min(1100px,94%);margin:25px auto}
+.card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:25px;margin-bottom:30px;box-shadow:0 10px 35px rgba(0,0,0,.25);backdrop-filter:blur(8px)}
+.card h2{color:#ffd86b;margin-bottom:15px}.card h3{color:#7ee8ff;margin:15px 0 8px}
+.definition{background:rgba(0,0,0,.25);border-left:5px solid #7ee8ff;padding:15px;border-radius:10px;margin:15px 0}
+.simulation{position:relative;width:100%;height:300px;background:linear-gradient(#071827,#0d2437);border:2px solid #31516b;border-radius:15px;overflow:hidden;margin-top:20px}
+button{border:none;padding:11px 18px;margin:6px 4px 0 0;border-radius:10px;background:#1976d2;color:white;font-size:15px;cursor:pointer;transition:.2s}
+button:hover{transform:translateY(-2px);background:#2196f3}button.stop{background:#d32f2f}button.reset{background:#555}button.active,.choice button.selected{background:#00897b}
+.info{display:flex;gap:12px;flex-wrap:wrap;margin-top:15px}.info-box{background:rgba(0,0,0,.3);padding:12px 18px;border-radius:10px;min-width:150px}.info-box strong{color:#ffd86b}
+.road{position:absolute;left:0;right:0;bottom:55px;height:70px;background:#30353b;border-top:3px solid #888;border-bottom:3px solid #888}.road:after{content:"";position:absolute;left:0;right:0;top:32px;border-top:5px dashed #ffd54f}
+.car{position:absolute;width:60px;height:30px;background:#ff5252;border-radius:8px 14px 5px 5px;bottom:75px;left:20px}.car:before{content:"";position:absolute;width:28px;height:15px;background:#90caf9;top:-10px;left:18px;border-radius:8px 8px 0 0}
+.wheel{position:absolute;width:14px;height:14px;border-radius:50%;background:#111;bottom:-7px}.w1{left:8px}.w2{right:8px}
+.path{fill:none;stroke:#00e5ff;stroke-width:4}.traj-dot{position:absolute;width:18px;height:18px;border-radius:50%;background:#ffeb3b;box-shadow:0 0 18px #ffeb3b}
+.choice{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.choice button{background:#37474f}
+.distance-line{position:absolute;height:5px;background:#ff9800;transform-origin:left center}.displacement{position:absolute;height:5px;background:#00e676;transform-origin:left center}
+.point{position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid #00e5ff}.label{position:absolute;font-weight:bold;color:#ffd86b}
+.test-question{background:rgba(0,0,0,.25);padding:18px;border-radius:12px;margin:12px 0}.answer{display:block;width:100%;text-align:left;background:#263238}.correct{background:#16804b!important}.wrong{background:#b71c1c!important}
+.result{font-size:20px;color:#ffd86b;margin-top:15px;font-weight:bold}footer{text-align:center;padding:25px;color:#aaa}
+@media(max-width:600px){.card{padding:17px}.simulation{height:250px}button{width:100%;margin-right:0}.info-box{flex:1}}
+</style>
+</head>
+<body>
+<header><h1>⚛️ Kinematikaning asosiy tushunchalari</h1><p>7-sinf fizika — interaktiv elektron dars</p></header>
+<div class="container">
+
+<section class="card">
+<h2>1. Moddiy nuqta</h2>
+<p>Jismning o‘lchamlari masalani yechishda hisobga olinmasa, u <b>moddiy nuqta</b> deb qaraladi.</p>
+<div class="definition"><b>Ta’rif:</b> Moddiy nuqta — o‘lchamlari ko‘rilayotgan masofaga nisbatan juda kichik bo‘lgan va masalani yechishda o‘lchamlari hisobga olinmaydigan jism.</div>
+<h3>Hayotiy misol</h3><p>Avtomobil shaharlar orasida uzoq masofaga harakat qilayotganida uning uzunligi va kengligini hisobga olmasdan, avtomobilni moddiy nuqta deb olish mumkin.</p>
+<h3>🎮 Interaktiv simulyatsiya</h3>
+<div class="simulation"><div class="road"></div><div class="car" id="car1"><div class="wheel w1"></div><div class="wheel w2"></div></div></div>
+<div><button onclick="startCar()">▶ Boshlash</button><button class="stop" onclick="stopCar()">⏸ To‘xtatish</button><button class="reset" onclick="resetCar()">↻ Qayta boshlash</button></div>
+<div class="info"><div class="info-box"><strong>Vaqt:</strong> <span id="time1">0</span> s</div><div class="info-box"><strong>Masofa:</strong> <span id="dist1">0</span> m</div><div class="info-box"><strong>Holat:</strong> <span id="state1">To‘xtagan</span></div></div>
+</section>
+
+<section class="card">
+<h2>2. Trayektoriya</h2>
+<p>Jism harakatlanayotganda uning ketma-ket egallagan nuqtalarini birlashtiruvchi chiziq <b>trayektoriya</b> deyiladi.</p>
+<div class="definition"><b>Trayektoriya</b> — harakatlanayotgan jismning fazoda chizgan izi.</div>
+<p>Trayektoriya to‘g‘ri chiziqli yoki egri chiziqli bo‘lishi mumkin.</p>
+<div class="choice"><button id="straightBtn" class="selected" onclick="setTrajectory('straight')">To‘g‘ri chiziq</button><button id="curveBtn" onclick="setTrajectory('curve')">Egri chiziq</button></div>
+<div class="simulation">
+<svg width="100%" height="100%" viewBox="0 0 1000 300" preserveAspectRatio="none"><path id="trajectoryPath" class="path" d="M 50 150 L 950 150"></path></svg>
+<div class="traj-dot" id="trajDot"></div>
+</div>
+<div><button onclick="startTrajectory()">▶ Animatsiyani boshlash</button><button class="stop" onclick="stopTrajectory()">⏸ To‘xtatish</button><button class="reset" onclick="resetTrajectory()">↻ Qayta boshlash</button></div>
+<div class="info"><div class="info-box"><strong>Trayektoriya:</strong> <span id="trajType">To‘g‘ri chiziqli</span></div><div class="info-box"><strong>Vaqt:</strong> <span id="time2">0</span> s</div></div>
+</section>
+
+<section class="card">
+<h2>3. Yo‘l va ko‘chish</h2>
+<p><b>Yo‘l</b> — jism bosib o‘tgan trayektoriya uzunligi.</p>
+<p><b>Ko‘chish</b> — jismning boshlang‘ich holatidan oxirgi holatiga yo‘nalgan kesma.</p>
+<div class="definition">💡 Muhim: Yo‘l — skalyar kattalik, ko‘chish esa yo‘nalishga ega bo‘lgan vektor kattalikdir.</div>
+<div class="simulation" id="sim3">
+<div class="point" style="left:10%;top:20%"></div><div class="label" style="left:8%;top:12%">A</div>
+<div class="point" style="left:50%;top:70%"></div><div class="label" style="left:48%;top:75%">B</div>
+<div class="point" style="left:85%;top:25%"></div><div class="label" style="left:84%;top:16%">C</div>
+<div class="distance-line" id="lineAB"></div><div class="distance-line" id="lineBC"></div><div class="displacement" id="lineAC"></div>
+<div class="traj-dot" id="movingDot" style="left:10%;top:20%"></div>
+</div>
+<div><button onclick="startMovement()">▶ Harakatni boshlash</button><button class="stop" onclick="stopMovement()">⏸ To‘xtatish</button><button class="reset" onclick="resetMovement()">↻ Qayta boshlash</button></div>
+<div class="info"><div class="info-box"><strong>Yo‘l:</strong> <span id="roadValue">0</span> m</div><div class="info-box"><strong>Ko‘chish:</strong> <span id="moveValue">0</span> m</div><div class="info-box"><strong>Holat:</strong> <span id="state3">A nuqtada</span></div></div>
+</section>
+
+<section class="card">
+<h2>🧠 O‘zingizni sinang</h2>
+<div class="test-question"><p><b>1. Moddiy nuqta nima?</b></p><button class="answer" onclick="checkAnswer(this,true)">A) O‘lchamlari masalada hisobga olinmaydigan jism</button><button class="answer" onclick="checkAnswer(this,false)">B) Faqat juda kichik zarracha</button><button class="answer" onclick="checkAnswer(this,false)">C) Harakatlanmaydigan jism</button></div>
+<div class="test-question"><p><b>2. Jism harakatining izi nima deyiladi?</b></p><button class="answer" onclick="checkAnswer(this,false)">A) Ko‘chish</button><button class="answer" onclick="checkAnswer(this,true)">B) Trayektoriya</button><button class="answer" onclick="checkAnswer(this,false)">C) Tezlik</button></div>
+<div class="test-question"><p><b>3. Bosib o‘tilgan trayektoriya uzunligi nima?</b></p><button class="answer" onclick="checkAnswer(this,true)">A) Yo‘l</button><button class="answer" onclick="checkAnswer(this,false)">B) Ko‘chish</button><button class="answer" onclick="checkAnswer(this,false)">C) Tezlanish</button></div>
+<div class="result" id="testResult">To‘g‘ri javoblar: 0 / 3</div>
+</section>
+</div>
+<footer>7-sinf fizika | Kinematikaning asosiy tushunchalari</footer>
+
+<script>
+let carRunning=false,carTimer,carX=20,carTime=0;
+const car=document.getElementById("car1");
+function startCar(){if(carRunning)return;carRunning=true;document.getElementById("state1").textContent="Harakatlanmoqda";carTimer=setInterval(()=>{carX+=1;if(carX>90){carX=20;carTime=0}car.style.left=carX+"%";carTime+=.1;document.getElementById("time1").textContent=carTime.toFixed(1);document.getElementById("dist1").textContent=Math.round(carTime*10)},100)}
+function stopCar(){carRunning=false;clearInterval(carTimer);document.getElementById("state1").textContent="To‘xtagan"}
+function resetCar(){stopCar();carX=20;carTime=0;car.style.left="20%";document.getElementById("time1").textContent="0";document.getElementById("dist1").textContent="0";document.getElementById("state1").textContent="To‘xtagan"}
+
+let trajectoryType="straight",trajectoryRunning=false,trajectoryTimer,trajectoryProgress=0;
+const trajDot=document.getElementById("trajDot"),trajectoryPath=document.getElementById("trajectoryPath");
+function setTrajectory(type){trajectoryType=type;document.getElementById("straightBtn").classList.remove("selected");document.getElementById("curveBtn").classList.remove("selected");if(type==="straight"){document.getElementById("straightBtn").classList.add("selected");trajectoryPath.setAttribute("d","M 50 150 L 950 150");document.getElementById("trajType").textContent="To‘g‘ri chiziqli"}else{document.getElementById("curveBtn").classList.add("selected");trajectoryPath.setAttribute("d","M 50 220 Q 300 20 500 150 T 950 80");document.getElementById("trajType").textContent="Egri chiziqli"}resetTrajectory()}
+function startTrajectory(){if(trajectoryRunning)return;trajectoryRunning=true;trajectoryTimer=setInterval(()=>{trajectoryProgress++;if(trajectoryProgress>100)trajectoryProgress=0;let x=5+trajectoryProgress*.9,y;if(trajectoryType==="straight")y=50;else{let t=trajectoryProgress/100;y=72-50*Math.sin(t*Math.PI)+8*Math.sin(t*Math.PI*2)}trajDot.style.left=x+"%";trajDot.style.top=y+"%";document.getElementById("time2").textContent=(trajectoryProgress/10).toFixed(1)},50)}
+function stopTrajectory(){trajectoryRunning=false;clearInterval(trajectoryTimer)}
+function resetTrajectory(){stopTrajectory();trajectoryProgress=0;trajDot.style.left="5%";trajDot.style.top=trajectoryType==="straight"?"50%":"72%";document.getElementById("time2").textContent="0"}
+
+let movementRunning=false,movementTimer,movementProgress=0;
+const movingDot=document.getElementById("movingDot");
+function line(el,x1,y1,x2,y2){let dx=x2-x1,dy=y2-y1;el.style.left=x1+"%";el.style.top=y1+"%";el.style.width=Math.sqrt(dx*dx+dy*dy)+"%";el.style.transform="rotate("+Math.atan2(dy,dx)+"rad)"}
+line(document.getElementById("lineAB"),10,20,50,70);line(document.getElementById("lineBC"),50,70,85,25);line(document.getElementById("lineAC"),10,20,85,25);
+function startMovement(){if(movementRunning)return;movementRunning=true;movementTimer=setInterval(()=>{movementProgress++;if(movementProgress>=100){movementProgress=100;stopMovement();document.getElementById("state3").textContent="C nuqtaga yetib keldi"}let x,y;if(movementProgress<=50){let t=movementProgress/50;x=10+t*40;y=20+t*50;document.getElementById("state3").textContent="A → B yo‘nalishda"}else{let t=(movementProgress-50)/50;x=50+t*35;y=70-t*45;document.getElementById("state3").textContent="B → C yo‘nalishda"}movingDot.style.left=x+"%";movingDot.style.top=y+"%";document.getElementById("roadValue").textContent=Math.round(movementProgress*1.5);document.getElementById("moveValue").textContent=Math.round(movementProgress*.75)},70)}
+function stopMovement(){movementRunning=false;clearInterval(movementTimer)}
+function resetMovement(){stopMovement();movementProgress=0;movingDot.style.left="10%";movingDot.style.top="20%";document.getElementById("roadValue").textContent="0";document.getElementById("moveValue").textContent="0";document.getElementById("state3").textContent="A nuqtada"}
+
+let score=0,answered=0;
+function checkAnswer(btn,correct){if(btn.parentElement.dataset.done)return;btn.parentElement.dataset.done="1";answered++;if(correct){btn.classList.add("correct");score++}else{btn.classList.add("wrong")}document.getElementById("testResult").textContent="To‘g‘ri javoblar: "+score+" / "+answered+(answered===3?" — Test yakunlandi!":"")}
+</script>
+</body>
+</html>
